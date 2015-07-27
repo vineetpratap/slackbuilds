@@ -10,5 +10,5 @@ These are the build scripts for the Slackware Linux 14.1
 NOTE:
 
 SlackBuild Scripts Usage HOWTO:
-http://slackbuilds.org/howto/
-http://www.slackwiki.com/SlackBuild_Scripts
+1.http://slackbuilds.org/howto/
+2.http://www.slackwiki.com/SlackBuild_Scripts
