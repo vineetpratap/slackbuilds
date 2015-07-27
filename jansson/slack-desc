@@ -1,0 +1,25 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+       |-----handy-ruler------------------------------------------------------|
+jansson: jansson (Jansson is a C library for encoding, decoding and manipulating JSON data)
+jansson:
+jansson: Jansson is a C library for encoding, decoding and manipulating JSON data. 
+jansson: Its main features and design principles are:
+jansson: 1. Simple and intuitive API and data model
+jansson: 2. Comprehensive documentation
+jansson: 3. No dependencies on other libraries
+jansson: 4. Full Unicode support (UTF-8)
+jansson: 5. Extensive test suite
+jansson:
+jansson: Jansson is licensed under the MIT license; see LICENSE in the source 
+jansson: distribution for details.
+jansson:
+jansson: Jansson is used in production and its API is stable. It works on numerous platforms,
+jansson: including numerous Unix like systems and Windows. It’s suitable for use on any system,
+jansson: including desktop, server, and small embedded systems.
+jansson:

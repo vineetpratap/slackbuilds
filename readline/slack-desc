@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+       |-----handy-ruler------------------------------------------------------|
+readline: readline (The GUN Readline library)
+readline:
+readline: The GNU Readline library provides a set of functions for use
+readline: by applications that allow users to edit command lines as they 
+readline: are typed in. 
+readline:
+readline: Both Emacs and vi editing modes are available. The Readline library 
+readline: includes additional functions to maintain a list of 
+readline: previously-entered command lines, to recall and perhaps reedit 
+readline: those lines, and perform csh-like history expansion on previous commands.
+readline: 

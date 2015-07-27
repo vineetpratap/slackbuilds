@@ -1,0 +1,17 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+       |-----handy-ruler------------------------------------------------------|
+lua: lua (Lua is a powerful, fast, lightweight, embeddable scripting language.)
+lua:
+lua: Lua combines simple procedural syntax with powerful data description 
+lua: constructs based on associative arrays and extensible semantics.
+lua:
+lua: Lua is dynamically typed, runs by interpreting bytecode for a register-based
+lua: virtual machine, and has automatic memory management with incremental garbage
+lua: collection, making it ideal for configuration, scripting, and rapid prototyping. 
+lua:
