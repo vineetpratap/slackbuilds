@@ -6,8 +6,8 @@ These are the build scripts for the Slackware Linux 14.1
 2. libconfig : libconfig is a simple library for processing structured configuration files.
 3. lua : Lua is a powerful, fast, lightweight, embeddable scripting language.
 4. readline : The Readline library provides a set of functions for use by applications that allow users to edit command lines as they are typed in.
+5. telegram-cli: Linux Command-line interface for Telegram.
 
-NOTE:
 
 #SlackBuild Scripts Usage HOWTO:
 
