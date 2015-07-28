@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Slackware build script for jansson
+# Slackware build script for telegram-cli
 
 # Copyright 2015 Vineet Pratap, Bangalore, India
 # All rights reserved.
@@ -23,10 +23,58 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-PRGNAM=jansson			# replace with name of program
-VERSION=${VERSION:-2.7}	# replace with version of program
+PRGNAM=telegram-cli		# replace with name of program
+SRCNAM=tg
+VERSION=${VERSION:-"$(date +%Y%m%d)"}		# replace with version of program
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}		# the "_SBo" is required
+
+# Where do we look for sources?
+SRCDIR=$(cd $(dirname $0); pwd)
+
+# If you want automatic download to work, supply a URL for 'SRCURL' below:
+SOURCE="$SRCDIR/${PRGNAM}-${VERSION}.tar.gz"
+SRCURL=""
+GITURI="https://github.com/vysheng/tg.git"
+
+# Use the src_checkout() function if no downloadable tarball exists.
+# This function checks out sources from GIT and creates a tarball of them.
+src_checkout() {
+  # Param #1 : index in the SOURCE[] array.
+  # Param #2 : full path to where SOURCE[$1] tarball should be created.
+  # Determine the tarball extension:
+  PEXT=$(echo "${2}" | sed -r -e 's/.*[^.].(tar.xz|tar.gz|tar.bz2|tgz).*/\1/')
+  case "$PEXT" in
+    "tar.xz") TARCOMP="J" ;;
+    "tar.gz") TARCOMP="z" ;;
+    "tgz") TARCOMP="z" ;;
+    "tar.bz2") TARCOMP="j" ;;
+    *) echo "Archive can only have extension 'tar.xz', '.tar.gz' '.tar.bz2' or '.tgz'" ; exit 1 ;;
+  esac
+  # Determine the directory name to create for the archive root:
+  PBASE=$(basename ${2} .${PEXT})
+  # Determine the directory where we create our checkout:
+  CODIR=$(dirname ${2})
+  case ${1} in
+  0)
+     RETDIR=$(pwd)
+     mkdir -p $CODIR/${PRGNAM}_temp_checkout_$$ \
+       && cd $CODIR/${PRGNAM}_temp_checkout_$$
+     mkdir ${PBASE} \
+       && git clone  --recursive ${GITURI} ${PBASE} \
+       && cd ${PBASE} \
+       && git checkout master \
+       && git checkout $(git rev-list -n 1 --before="`date -d $VERSION`" master) \
+       && cd .. \
+       && chown -R root:root ${PBASE} \
+       && tar --exclude .git -${TARCOMP}cf ${2} ${PBASE}
+     cd $RETDIR
+     rm -rf $CODIR/${PRGNAM}_temp_checkout_$$ || true
+     ;;
+  *) # Do nothing
+     ;;
+  esac
+}
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
@@ -62,10 +110,24 @@ set -e # Exit on most errors
 #   command || exit 1
 # then that's also acceptable.
 
+# Catch unitialized variables:
+set -u
+P1=${1:-1}
+
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
+
+# Try if we have a GIT/SVN/CVS download routine for ${SOURCE}
+echo "Will checkout sources to $(dirname $SOURCE)"
+src_checkout 0 "${SOURCE}" 2>&1 > $OUTPUT/checkout-$(basename ${SOURCE}).log
+
+if [ "$P1" == "--download" ]; then
+  echo "Download complete."
+  exit 0
+fi
+
 tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
 cd $PRGNAM-$VERSION
 chown -R root:root .
@@ -81,18 +143,28 @@ find -L . \
 # static.
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
+LDFLAGS="$SLKCFLAGS -lncursesw " \
 ./configure \
   --prefix=/usr \
   --libdir=/usr/lib${LIBDIRSUFFIX} \
   --sysconfdir=/etc \
   --localstatedir=/var \
-  --mandir=/usr/man \
-  --docdir=/usr/doc/$PRGNAM-$VERSION \
-  --build=$ARCH-slackware-linux
+  --build=$ARCH-slackware-linux \
+  2>&1 | tee $OUTPUT/configure-$PRGNAM-$VERSION.log
+
+# A fix for Slackware's old readline package:
+sed -i -e 's/ledit/lreadline/g' Makefile
 
 # Compile the application and install it into the $PKG directory
-make
-make install DESTDIR=$PKG
+make | tee $OUTPUT/make-$PRGNAM-$VERSION.log
+
+# Install the binary:
+install -D -m0755 bin/telegram-cli $PKG/usr/bin/$PRGNAM
+
+# Add public key for the server where the client will look for it:
+install -D -m0644 tg-server.pub $PKG/etc/$PRGNAM/server.pub
+
+#make install DESTDIR=$PKG
 
 # Strip binaries and libraries - this can be done with 'make install-strip'
 # in many source trees, and that's usually acceptable if so, but if not,
@@ -109,8 +181,8 @@ find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | gr
 
 # Compress info pages and remove the package's dir file
 # If no info pages are installed by the software, don't leave this in the script
-rm -f $PKG/usr/info/dir
-#gzip -9 $PKG/usr/info/*.info*
+#rm -f $PKG/usr/info/dir
+#gzip -9 $PKG/usr/share/info/*.info*
 
 # Remove perllocal.pod and other special files that don't need to be installed,
 # as they will overwrite what's already on the system.  If this is not needed,
@@ -126,9 +198,10 @@ find $PKG -name perllocal.pod \
 # to adjust your script as needed
 # Also, include the SlackBuild script in the documentation directory
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a \
-  doc/* \
-  $PKG/usr/doc/$PRGNAM-$VERSION
+#cp -a \
+#  doc/* \
+# $PKG/usr/doc/$PRGNAM-$VERSION
+
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 # Copy the slack-desc (and a custom doinst.sh if necessary) into ./install
