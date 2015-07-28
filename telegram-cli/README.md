@@ -1,4 +1,4 @@
-## Telegram messenger CLI [![Build Status](https://travis-ci.org/vysheng/tg.png)](https://travis-ci.org/vysheng/tg)
+## Telegram messenger CLI
 
 Command-line interface for [Telegram](http://telegram.org). Uses readline interface.
 
@@ -82,8 +82,6 @@ If using [Homebrew](http://brew.sh/):
      export CFLAGS="-I/usr/local/include -I/usr/local/Cellar/readline/6.3.8/include"
      export LDFLAGS="-L/usr/local/lib -L/usr/local/Cellar/readline/6.3.8/lib"
      ./configure && make
-
-Thanks to [@jfontan](https://github.com/vysheng/tg/issues/3#issuecomment-28293731) for this solution.
 
 If using [MacPorts](https://www.macports.org):
      
